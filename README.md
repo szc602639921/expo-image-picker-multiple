@@ -1,6 +1,7 @@
 [![npm version](https://badge.fury.io/js/expo-image-picker-multiple.svg)](https://badge.fury.io/js/expo-image-picker-multiple)
 
 # expo-image-picker-multiple
+It is forked from [expo-image-picker-multiple](https://github.com/MonstroDev/expo-image-picker-multiple#readme). This version I add a modal for loading screen, which enables me to customize it.
 
 Multiple image selecting package for Expo SDK (React Native) using [MediaLibrary](https://docs.expo.io/versions/latest/sdk/media-library) and [Permissions](https://docs.expo.io/versions/latest/sdk/permissions).
 
