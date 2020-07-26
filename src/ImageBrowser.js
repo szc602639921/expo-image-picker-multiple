@@ -5,6 +5,7 @@ import {
   FlatList,
   Dimensions,
   ActivityIndicator,
+  Modal,
 } from 'react-native'
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as MediaLibrary from 'expo-media-library'
@@ -22,7 +23,8 @@ export default class ImageBrowser extends React.Component {
     selected: [],
     isEmpty: false,
     after: null,
-    hasNextPage: true
+    hasNextPage: true,
+    loading: true,
   }
 
   async componentDidMount() {
@@ -88,6 +90,7 @@ export default class ImageBrowser extends React.Component {
         after: data.endCursor,
         hasNextPage: data.hasNextPage
       });
+      this.setState({loading: false});
     } else {
       this.setState({isEmpty: true});
     }
@@ -120,12 +123,13 @@ export default class ImageBrowser extends React.Component {
     )
   }
 
-  renderPreloader = () =>  this.props.preloaderComponent || <ActivityIndicator size="large"/>;
+  renderPreloader = () =>  this.props.preloaderComponent || <View style={styles.loadingScree}><ActivityIndicator size="large" style={{}}/></View> ;
 
   renderEmptyStay = () =>  this.props.emptyStayComponent || null;
 
   renderImages() {
     return (
+      <View>
       <FlatList
         data={this.state.photos}
         numColumns={this.state.numColumns}
@@ -134,10 +138,17 @@ export default class ImageBrowser extends React.Component {
         keyExtractor={(_, index) => index}
         onEndReached={() => {this.getPhotos()}}
         onEndReachedThreshold={0.5}
-        ListEmptyComponent={this.state.isEmpty ? this.renderEmptyStay() : this.renderPreloader()}
+        ListEmptyComponent={this.state.isEmpty ? this.renderEmptyStay() : null}
         initialNumToRender={24}
         getItemLayout={this.getItemLayout}
       />
+      <Modal
+      transparent={true}
+      visible={this.state.loading}
+      >
+        {this.renderPreloader()}
+      </Modal>
+      </View>
     )
   }
 
@@ -149,7 +160,7 @@ export default class ImageBrowser extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} >
         {this.renderImages()}
       </View>
     );
@@ -160,4 +171,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingScree: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  }
 })
